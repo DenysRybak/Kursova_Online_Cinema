@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Login</h1>
+
+<div class="login-box">
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p>Don't have an account? <a href="#" onclick="register()">Register</a></p>
+</div>
+
+<script>
+const API_URL = "http://127.0.0.1:8000";
+
+async function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    const res = await fetch(`${API_URL}/users/login`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ username, password })
+    });
+
+    if (!res.ok) {
+        alert("Invalid login!");
+        return;
+    }
+
+    const data = await res.json();
+
+    localStorage.setItem("user_id", data.id);
+    localStorage.setItem("username", data.username);
+
+    window.location.href = "index.html";
+}
+
+async function register() {
+    const username = prompt("Enter new username:");
+    const password = prompt("Enter password:");
+
+    if (!username || !password) return;
+
+    const res = await fetch(`${API_URL}/users/`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            username,
+            password,
+            subscription_type: "free"
+        })
+    });
+
+    if (!res.ok) {
+        alert("User already exists!");
+        return;
+    }
+
+    alert("Registration successful! Now log in.");
+}
+</script>
+
+</body>
+</html>

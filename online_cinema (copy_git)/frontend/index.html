@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
+<body>
+
 <!-- AD BANNER -->
 <div id="ad-banner" style="
     background: #ffcc00;
@@ -13,23 +15,30 @@
     text-align: center;
     font-size: 22px;
     font-weight: bold;
-    margin-top: 20px;
+    margin: 20px;
     border-radius: 8px;
 ">
-    🔥Купіть супер гру! WOT і грайтеся в танчики! (Buy Premium & Remove Ads! Only $1.99/month!)
+    🔥 Купіть супер гру! WOT і грайтеся в танчики!
+    (Buy Premium & Remove Ads! Only $1.99/month!)
 </div>
-
-
-<body>
 
 <header>
     <h1>Online Cinema</h1>
 
     <nav>
-        <button onclick="goProfile()" id="profileBtn" style="display:none;">Profile</button>
         <button onclick="goLogin()" id="loginBtn">Login</button>
+        <button onclick="goProfile()" id="profileBtn" style="display:none;">Profile</button>
+
+        <!-- ✅ ADMIN BUTTON -->
+        <button onclick="goAdmin()"
+        style="display:inline-block !important; background:red; color:white;">
+    Admin Panel
+</button>
+
     </nav>
 </header>
+
+<hr>
 
 <input type="text" id="searchInput" placeholder="Search movies...">
 <button onclick="searchMovies()">Search</button>
@@ -40,22 +49,21 @@
 <script>
 const API_URL = "http://127.0.0.1:8000";
 
-
+// ---------------- AD BANNER ----------------
 async function checkAdBanner() {
     const userId = localStorage.getItem("user_id");
-
-    if (!userId) return; // гість → показуємо рекламу
+    if (!userId) return;
 
     const res = await fetch(`${API_URL}/users/${userId}`);
     if (!res.ok) return;
 
     const user = await res.json();
-
     if (user.subscription_type === "premium") {
         document.getElementById("ad-banner").style.display = "none";
     }
 }
 
+// ---------------- MOVIES ----------------
 async function loadMovies() {
     const res = await fetch(`${API_URL}/movies/`);
     const movies = await res.json();
@@ -92,7 +100,7 @@ function openMovie(id) {
     window.location.href = `movie.html?id=${id}`;
 }
 
-// ==== LOGIN / PROFILE BUTTON CONTROL ====
+// ---------------- NAVIGATION ----------------
 const user = localStorage.getItem("user_id");
 if (user) {
     document.getElementById("profileBtn").style.display = "inline-block";
@@ -105,6 +113,10 @@ function goLogin() {
 
 function goProfile() {
     window.location.href = "profile.html";
+}
+
+function goAdmin() {
+    window.location.href = "admin_login.html";
 }
 
 loadMovies();
