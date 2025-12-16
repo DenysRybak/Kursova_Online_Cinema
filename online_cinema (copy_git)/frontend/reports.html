@@ -9,44 +9,86 @@
     table { width: 100%; border-collapse: collapse; }
     th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
     th { background: #f0f0f0; }
+
+    .nav-buttons {
+      margin-bottom: 20px;
+    }
+
+    .nav-buttons button {
+      padding: 10px 15px;
+      margin-right: 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #4c8bf5;
+      color: white;
+      font-weight: bold;
+    }
+
+    .nav-buttons button:hover {
+      background: #3b69d4;
+    }
   </style>
 </head>
+
 <body>
-  <h1>Reports</h1>
 
-  <div class="report">
-    <h2>Popular Movies</h2>
-    <div id="popular-movies">Loading...</div>
-  </div>
+<h1>Reports</h1>
 
-  <div class="report">
-    <h2>Popular Genres</h2>
-    <div id="popular-genres">Loading...</div>
-  </div>
+<div class="nav-buttons">
+  <button onclick="goAdmin()">⬅ Back to Admin Panel</button>
+  <button onclick="goHome()">🏠 Back to Home</button>
+</div>
 
-  <div class="report">
-    <h2>User Activity</h2>
-    <div id="user-activity">Loading...</div>
-  </div>
+<div class="report">
+  <h2>Popular Movies</h2>
+  <div id="popular-movies">Loading...</div>
+</div>
 
-  <div class="report">
-    <h2>Subscription Income</h2>
-    <div id="subscription-income">Loading...</div>
-  </div>
+<div class="report">
+  <h2>Popular Genres</h2>
+  <div id="popular-genres">Loading...</div>
+</div>
+
+<div class="report">
+  <h2>User Activity</h2>
+  <div id="user-activity">Loading...</div>
+</div>
+
+<div class="report">
+  <h2>Subscription Income</h2>
+  <div id="subscription-income">Loading...</div>
+</div>
 
 <script>
 const API = "http://127.0.0.1:8000";
 
+// ---------- NAV ----------
+function goAdmin() {
+  window.location.href = "admin.html";
+}
+
+function goHome() {
+  window.location.href = "index.html";
+}
+
+// ---------- REPORTS ----------
 async function loadPopularMovies() {
   const res = await fetch(`${API}/reports/popular-movies`);
   const data = await res.json();
   const container = document.getElementById("popular-movies");
-  if (!data || data.length === 0) { container.innerText = "No data"; return; }
+
+  if (!data || data.length === 0) {
+    container.innerText = "No data";
+    return;
+  }
+
   let html = '<table><tr><th>Title</th><th>Genre</th><th>Favorites</th></tr>';
   data.forEach(r => {
     html += `<tr><td>${r.title}</td><td>${r.genre}</td><td>${r.favorites_count}</td></tr>`;
   });
   html += '</table>';
+
   container.innerHTML = html;
 }
 
@@ -54,10 +96,18 @@ async function loadPopularGenres() {
   const res = await fetch(`${API}/reports/popular-genres`);
   const data = await res.json();
   const container = document.getElementById("popular-genres");
-  if (!data || data.length === 0) { container.innerText = "No data"; return; }
+
+  if (!data || data.length === 0) {
+    container.innerText = "No data";
+    return;
+  }
+
   let html = '<table><tr><th>Genre</th><th>Count</th></tr>';
-  data.forEach(r => { html += `<tr><td>${r.genre}</td><td>${r.count}</td></tr>`; });
+  data.forEach(r => {
+    html += `<tr><td>${r.genre}</td><td>${r.count}</td></tr>`;
+  });
   html += '</table>';
+
   container.innerHTML = html;
 }
 
@@ -65,10 +115,18 @@ async function loadUserActivity() {
   const res = await fetch(`${API}/reports/user-activity`);
   const data = await res.json();
   const container = document.getElementById("user-activity");
-  if (!data || data.length === 0) { container.innerText = "No data"; return; }
+
+  if (!data || data.length === 0) {
+    container.innerText = "No data";
+    return;
+  }
+
   let html = '<table><tr><th>User</th><th>Favorites</th></tr>';
-  data.forEach(r => { html += `<tr><td>${r.username}</td><td>${r.favorites_count}</td></tr>`; });
+  data.forEach(r => {
+    html += `<tr><td>${r.username}</td><td>${r.favorites_count}</td></tr>`;
+  });
   html += '</table>';
+
   container.innerHTML = html;
 }
 
@@ -76,19 +134,27 @@ async function loadSubscriptionIncome() {
   const res = await fetch(`${API}/reports/subscription-income`);
   const data = await res.json();
   const container = document.getElementById("subscription-income");
-  if (!data || !data.details) { container.innerText = "No data"; return; }
+
+  if (!data || !data.details) {
+    container.innerText = "No data";
+    return;
+  }
+
   let html = '<table><tr><th>Type</th><th>Users</th><th>Price</th><th>Total</th></tr>';
   data.details.forEach(r => {
     html += `<tr><td>${r.subscription_type}</td><td>${r.users}</td><td>${r.price_per_user}</td><td>${r.total_income}</td></tr>`;
   });
   html += `<tr><td colspan="3"><b>Total</b></td><td><b>${data.total_income}</b></td></tr></table>`;
+
   container.innerHTML = html;
 }
 
+// ---------- INIT ----------
 loadPopularMovies();
 loadPopularGenres();
 loadUserActivity();
 loadSubscriptionIncome();
 </script>
+
 </body>
 </html>

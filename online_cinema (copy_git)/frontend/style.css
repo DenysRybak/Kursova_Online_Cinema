@@ -101,4 +101,139 @@ header {
     background: #3b69d4;
 }
 
+/* ================= ADMIN PANEL ================= */
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1f2937;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #4c8bf5;
+  color: white;
+}
+
+.btn.secondary { background: #6b7280; }
+.btn.danger { background: #dc2626; }
+
+.btn:hover { opacity: 0.9; }
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.card-grid {
+  display: grid;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================
+   MOVIE DETAILS PAGE STYLE
+   ========================= */
+
+body {
+    background: #f2f2f2;
+}
+
+/* контейнер сторінки фільму */
+.movie-page,
+#movieDetails {
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+/* карточка фільму */
+.movie-details,
+#movieDetails {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* заголовок фільму */
+#movieDetails h1 {
+    margin-top: 0;
+    font-size: 30px;
+    color: #222;
+}
+
+/* текстові поля */
+#movieDetails p {
+    font-size: 16px;
+    margin: 6px 0;
+    color: #444;
+}
+
+/* опис фільму */
+#movieDetails .movie-description,
+#movieDetails div {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f7f7f7;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+/* кнопки */
+#movieDetails button,
+button {
+    margin-top: 15px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* кнопка favorite */
+#movieDetails button {
+    background: #e91e63;
+    color: white;
+}
+
+#movieDetails button:hover {
+    background: #c2185b;
+}
+
+/* кнопка назад */
+.back-btn,
+button[onclick*="goHome"] {
+    background: #555;
+    color: white;
+}
+
+.back-btn:hover {
+    background: #333;
+}
+
+
+
+
+
 
