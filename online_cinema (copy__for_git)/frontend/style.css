@@ -1,0 +1,239 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Auth buttons */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-auth {
+    background: #4C8BF5;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.btn-auth:hover {
+    background: #3b69d4;
+}
+
+/* Search */
+#searchInput {
+    width: 60%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #777;
+}
+
+/* Movie cards */
+#moviesList {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.movie-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.movie-card button {
+    margin-top: 10px;
+    padding: 8px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.movie-card button:hover {
+    background: #3b8f3f;
+}
+
+/* Forms */
+.form-box {
+    width: 300px;
+    margin: 40px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-box input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #777;
+}
+
+.form-box button {
+    padding: 10px;
+    background: #4c8bf5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.form-box button:hover {
+    background: #3b69d4;
+}
+
+/* ================= ADMIN PANEL ================= */
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1f2937;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #4c8bf5;
+  color: white;
+}
+
+.btn.secondary { background: #6b7280; }
+.btn.danger { background: #dc2626; }
+
+.btn:hover { opacity: 0.9; }
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.card-grid {
+  display: grid;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================
+   MOVIE DETAILS PAGE STYLE
+   ========================= */
+
+body {
+    background: #f2f2f2;
+}
+
+/* контейнер сторінки фільму */
+.movie-page,
+#movieDetails {
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+/* карточка фільму */
+.movie-details,
+#movieDetails {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* заголовок фільму */
+#movieDetails h1 {
+    margin-top: 0;
+    font-size: 30px;
+    color: #222;
+}
+
+/* текстові поля */
+#movieDetails p {
+    font-size: 16px;
+    margin: 6px 0;
+    color: #444;
+}
+
+/* опис фільму */
+#movieDetails .movie-description,
+#movieDetails div {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f7f7f7;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+/* кнопки */
+#movieDetails button,
+button {
+    margin-top: 15px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* кнопка favorite */
+#movieDetails button {
+    background: #e91e63;
+    color: white;
+}
+
+#movieDetails button:hover {
+    background: #c2185b;
+}
+
+/* кнопка назад */
+.back-btn,
+button[onclick*="goHome"] {
+    background: #555;
+    color: white;
+}
+
+.back-btn:hover {
+    background: #333;
+}
+
+
+
+
+
+
