@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>User Profile</h1>
+
+<div class="profile-box">
+    <p><b>Username:</b> <span id="username"></span></p>
+    <p><b>Subscription:</b> <span id="sub"></span></p>
+    <button onclick="upgrade()">Upgrade to PREMIUM</button>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<h3>Upgrade to Premium</h3>
+
+<div id="payment-area">
+    <input id="card-number" placeholder="Card Number" style="width: 200px;">
+    <input id="card-date" placeholder="MM/YY" style="width: 100px;">
+    <input id="card-cvv" placeholder="CVV" style="width: 60px;">
+    <button onclick="upgradeToPremium()">Buy Premium</button>
+</div>
+
+<p id="sub-status"></p>
+
+
+<h2>Your Favorite Movies</h2>
+<div id="favorites"></div>
+
+<h2>Recommended for you</h2>
+<div id="recommendations"></div>
+
+<script>
+const API_URL = "http://127.0.0.1:8000";
+
+const userId = localStorage.getItem("user_id");
+const username = localStorage.getItem("username");
+
+if (!userId) {
+    window.location.href = "login.html";
+}
+
+document.getElementById("username").innerText = username;
+
+// Load subscription
+async function loadUser() {
+    const res = await fetch(`${API_URL}/users/${userId}`);
+    const user = await res.json();
+
+    document.getElementById("sub").innerText = user.subscription_type;
+}
+
+async function loadFavorites() {
+    const res = await fetch(`${API_URL}/favorites/${userId}`);
+    const favs = await res.json();
+
+    const container = document.getElementById("favorites");
+    container.innerHTML = "";
+
+    favs.forEach(f => {
+        const item = document.createElement("div");
+        item.className = "fav-card";
+
+        item.innerHTML = `
+            <p><b>Movie ID:</b> ${f.movie_id}</p>
+            <button onclick="removeFav(${f.id})">Remove</button>
+        `;
+        container.appendChild(item);
+    });
+}
+
+async function removeFav(id) {
+    await fetch(`${API_URL}/favorites/${id}`, { method: "DELETE" });
+    loadFavorites();
+}
+
+async function upgrade() {
+    await fetch(`${API_URL}/users/${userId}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            username: username,
+            password: "123",
+            subscription_type: "premium"
+        })
+    });
+
+    alert("Subscription upgraded!");
+    loadUser();
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
+async function loadRecommendations() {
+    if (!userId) return;
+    const res = await fetch(`${API_URL}/recommendations/user/${userId}`);
+    if (!res.ok) {
+        document.getElementById("recommendations").innerText = "No recommendations.";
+        return;
+    }
+    const recs = await res.json();
+    const container = document.getElementById("recommendations");
+    container.innerHTML = "";
+    if (!recs || recs.length === 0) {
+        container.innerText = "No recommendations yet.";
+        return;
+    }
+
+    recs.forEach(m => {
+        const el = document.createElement("div");
+        el.className = "movie-card";
+        el.innerHTML = `
+            <h4>${m.title} (${m.year})</h4>
+            <p><i>${m.genre}</i> — rating: ${m.rating || "-"}</p>
+            <button onclick="openMovie(${m.id})">Open</button>
+            <button onclick="addFavFromRec(${m.id})">Add to Favorites</button>
+        `;
+        container.appendChild(el);
+    });
+}
+
+function openMovie(id) {
+    window.location.href = `movie.html?id=${id}`;
+}
+
+async function addFavFromRec(movieId) {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) { alert("Please login"); return; }
+    const res = await fetch(`${API_URL}/favorites/`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+            user_id: Number(userId),
+            movie_id: Number(movieId)
+        })
+    });
+    if (res.ok) {
+        alert("Added to favorites");
+        loadFavorites(); // оновимо список улюблених
+    } else {
+        const txt = await res.text();
+        alert("Could not add favorite: " + txt);
+    }
+}
+async function loadUser() {
+    const userId = localStorage.getItem("user_id");
+    const res = await fetch(`${API_URL}/users/${userId}`);
+    const user = await res.json();
+
+    document.getElementById("sub-status").innerText =
+        `Your Subscription: ${user.subscription_type}`;
+}
+
+async function upgradeToPremium() {
+    const userId = localStorage.getItem("user_id");
+
+    // Перевірка картки (фейкова, але для вигляду)
+    const num = document.getElementById("card-number").value;
+    const date = document.getElementById("card-date").value;
+    const cvv = document.getElementById("card-cvv").value;
+
+    if (num.length < 8 || cvv.length < 3) {
+        alert("Invalid card");
+        return;
+    }
+
+    const res = await fetch(`${API_URL}/users/${userId}/subscription`, {
+        method: "PATCH",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ subscription_type: "premium" })
+    });
+
+    if (res.ok) {
+        alert("You are now PREMIUM!");
+
+        document.getElementById("sub-status").innerText =
+            "Your Subscription: premium";
+
+        // OPTIONAL: ховаємо оплату після апгрейду
+        document.getElementById("payment-area").style.display = "none";
+    }
+}
+
+loadUser();
+loadFavorites();
+loadRecommendations();
+</script>
+
+</body>
+</html>
